@@ -1,0 +1,1 @@
+a:3:{s:4:"name";s:3:"ash";s:5:"email";s:27:"ashrafulkarim.dev@gmail.com";s:8:"password";s:60:"$2y$10$nEII1jJG/djEfGwFPX1M1e4SLPehg7FKfGUYyofhm7KTk1n375vt.";}
