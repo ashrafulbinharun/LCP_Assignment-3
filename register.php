@@ -10,8 +10,13 @@
     require './functions.php';
 
     $errors = [];
+    $oldInput = [];
 
     if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+        // if error happens keep the value
+        $oldInput['name'] = $_POST['name'] ?? '';
+        $oldInput['email'] = $_POST['email'] ?? '';
+
         $username = $_POST['name'];
         $email = $_POST['email'];
         $password = $_POST['password'];
@@ -67,6 +72,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TruthWhisper - Anonymous Feedback App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -147,13 +153,15 @@
                         </div>
 
                         <div class="mt-10 mx-auto w-full max-w-xl">
-                            <form class="space-y-6" action="./register.php" method="POST">
+                            <form class="space-y-6" action="<?=htmlspecialchars( $_SERVER['PHP_SELF'] )?>" method="POST"
+                                novalidate>
                                 <div>
                                     <label for="name"
                                         class="block text-sm font-medium leading-6 text-gray-900">Name</label>
                                     <div class="mt-2">
                                         <input id="name" name="name" type="text" required
-                                            class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2">
+                                            class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2"
+                                            value="<?php echo htmlspecialchars( $oldInput['name'] ?? '' ); ?>">
                                     </div>
                                     <?php if ( isset( $errors['name'] ) ): ?>
                                     <p class="text-xs text-red-600 mt-2">
@@ -167,7 +175,8 @@
                                         address</label>
                                     <div class="mt-2">
                                         <input id="email" name="email" type="email" autocomplete="email" required
-                                            class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2">
+                                            class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2"
+                                            value="<?php echo htmlspecialchars( $oldInput['email'] ?? '' ); ?>">
                                     </div>
                                     <?php if ( isset( $errors['email'] ) ): ?>
                                     <p class="text-xs text-red-600 mt-2">
@@ -185,6 +194,11 @@
                                         <input id="password" name="password" type="password"
                                             autocomplete="current-password" required
                                             class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2">
+                                        <span
+                                            class="absolute right-20 bottom-[19.5rem] flex items-center pr-3 cursor-pointer"
+                                            onclick="togglePassword('password', 'password-icon')">
+                                            <i id="password-icon" class="fas fa-eye text-gray-400"></i>
+                                        </span>
                                     </div>
                                     <?php if ( isset( $errors['password'] ) ): ?>
                                     <p class="text-xs text-red-600 mt-2">
@@ -202,6 +216,11 @@
                                     <div class="mt-2">
                                         <input id="confirm_password" name="confirm_password" type="password" required
                                             class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2">
+                                        <span
+                                            class="absolute right-20 bottom-[13.5rem] flex items-center pr-3 cursor-pointer"
+                                            onclick="togglePassword('confirm_password', 'confirm-password-icon')">
+                                            <i id="password-icon" class="fas fa-eye text-gray-400"></i>
+                                        </span>
                                     </div>
                                     <?php if ( isset( $errors['password_match'] ) ): ?>
                                     <p class="text-xs text-red-600 mt-2">
@@ -235,6 +254,21 @@
         </div>
     </footer>
 
+    <script type="text/javascript">
+    function togglePassword(inputId, iconId) {
+        const passwordInput = document.getElementById(inputId);
+        const passwordIcon = document.getElementById(iconId);
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordIcon.classList.remove('fa-eye');
+            passwordIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            passwordIcon.classList.remove('fa-eye-slash');
+            passwordIcon.classList.add('fa-eye');
+        }
+    }
+    </script>
 </body>
 
 </html>

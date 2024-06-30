@@ -1,6 +1,7 @@
 <?php
 
 define( "USERS", __DIR__ . "/data/users.txt" );
+define( "FEEDBACKS", __DIR__ . "/data/feedbacks.txt" );
 
 // Function to add a user
 function addUser( $name, $email, $password ) {
@@ -38,6 +39,7 @@ function authUser( $email, $password ) {
     return false;
 }
 
+// Function to generate a session flush message
 function flash( $key, $message = null ) {
     // If a message is passed in, set it
     if ( $message ) {
@@ -49,4 +51,28 @@ function flash( $key, $message = null ) {
         unset( $_SESSION['flash'][$key] );
         return $message;
     }
+}
+
+// Function to add feedback
+function addFeedback( $feedback ) {
+    $feedback = [
+        'feedback'   => $feedback,
+        'created_at' => date( 'Y-m-d H:i:s' ),
+    ];
+
+    $feedbackData = serialize( $feedback );
+    file_put_contents( FEEDBACKS, $feedbackData . PHP_EOL, FILE_APPEND | LOCK_EX );
+}
+
+// Function to get all feedbacks
+function getFeedbacks() {
+    $feedbacks = [];
+    $data = file( FEEDBACKS, FILE_IGNORE_NEW_LINES );
+
+    foreach ( $data as $feedback ) {
+        $allFeedbacks = unserialize( $feedback );
+        $feedbacks[] = $allFeedbacks;
+    }
+
+    return $feedbacks;
 }
