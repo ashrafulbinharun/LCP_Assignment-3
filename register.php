@@ -7,12 +7,12 @@
         exit;
     }
 
-    require './functions.php';
+    require_once './functions.php';
 
     $errors = [];
     $oldInput = [];
 
-    if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+    if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
         // if error happens keep the value
         $oldInput['name'] = $_POST['name'] ?? '';
         $oldInput['email'] = $_POST['email'] ?? '';

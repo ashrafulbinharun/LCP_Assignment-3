@@ -8,7 +8,7 @@
         exit;
     }
 
-    require './functions.php';
+    require_once './functions.php';
 
     $errors = [];
     $oldInput = [];
