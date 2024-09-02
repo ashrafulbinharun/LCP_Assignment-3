@@ -4,24 +4,27 @@
 
     $errors = [];
     $oldInput = [];
+    $userId = $_GET['user_id'];
 
-    if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $userId = $_POST['user_id'] ?? '';
+
         // if error happens keep the value
         $oldInput['feedback'] = $_POST['feedback'] ?? '';
 
         $feedback = $_POST['feedback'];
 
         // Sanitize and Validate the Feedback Field
-        if ( empty( $feedback ) ) {
+        if (empty($feedback)) {
             $errors['feedback'] = 'Please provide a feedback';
         } else {
-            $feedback = filter_input( INPUT_POST, 'feedback', FILTER_SANITIZE_SPECIAL_CHARS );
+            $feedback = filter_input(INPUT_POST, 'feedback', FILTER_SANITIZE_SPECIAL_CHARS);
         }
 
-        if ( empty( $errors ) ) {
+        if (empty($errors)) {
             // store feedback
-            addFeedback( $feedback );
-            header( "Location: feedback-success.php" );
+            addFeedback($userId, $feedback);
+            header("Location: feedback-success.php");
             exit;
         }
     }
@@ -91,22 +94,23 @@
                         </div>
 
                         <div class="mt-10 mx-auto w-full max-w-xl">
-                            <form class="space-y-6" action="<?=htmlspecialchars( $_SERVER['PHP_SELF'] )?>" method="POST"
-                                novalidate>
+                            <form class="space-y-6" action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST">
                                 <div>
                                     <label for="feedback"
                                         class="block text-sm font-medium leading-6 text-gray-900">Don't hesitate, just
                                         do it!</label>
                                     <div class="mt-2">
                                         <textarea required name="feedback" id="feedback" cols="30" rows="10"
-                                            class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"><?=htmlspecialchars( $oldInput['feedback'] ?? '' );?></textarea>
+                                            class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"><?=htmlspecialchars($oldInput['feedback'] ?? '');?></textarea>
                                     </div>
-                                    <?php if ( isset( $errors['feedback'] ) ): ?>
+                                    <?php if (isset($errors['feedback'])): ?>
                                     <p class="text-xs text-red-600 mt-2">
                                         <?=$errors['feedback'];?>
                                     </p>
                                     <?php endif;?>
                                 </div>
+
+                                <input type="hidden" name="user_id" value="<?=htmlspecialchars($userId)?>">
 
                                 <div>
                                     <button type="submit"

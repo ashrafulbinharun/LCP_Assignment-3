@@ -3,8 +3,8 @@
     session_start();
 
     // check if the user is already logged in
-    if ( isset( $_SESSION['user'] ) ) {
-        header( "Location: dashboard.php" );
+    if (isset($_SESSION['user'])) {
+        header("Location: dashboard.php");
         exit;
     }
 
@@ -13,7 +13,7 @@
     $errors = [];
     $oldInput = [];
 
-    if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // if error happens keep the value
         $oldInput['email'] = $_POST['email'] ?? '';
 
@@ -21,28 +21,29 @@
         $password = $_POST['password'];
 
         // Sanitize and Validate the Email Field
-        if ( empty( $email ) ) {
+        if (empty($email)) {
             $errors['email'] = 'Please provide an email address';
         } else {
-            $email = filter_input( INPUT_POST, 'email', FILTER_SANITIZE_EMAIL );
-            if ( !filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
+            $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = 'Please provide a valid email address';
             }
         }
 
         // Sanitize and Validate the Password Field
-        if ( empty( $password ) ) {
+        if (empty($password)) {
             $errors['password'] = 'Please provide a password';
-        } elseif ( strlen( $password ) < 6 ) {
+        } elseif (strlen($password) < 6) {
             $errors['password'] = 'Password must be at least 6 characters';
         }
 
-        if ( empty( $errors ) ) {
+        if (empty($errors)) {
             // authenticate a user
-            $user = authUser( $email, $password );
-            if ( $user ) {
+            $user = authUser($email, $password);
+            if ($user) {
+                $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['user'] = $user['name'];
-                header( "Location: dashboard.php" );
+                header("Location: dashboard.php");
                 exit;
             } else {
                 $errors['auth'] = 'Invalid email or password';
@@ -121,15 +122,15 @@
                 class="relative bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-10">
 
                 <?php
-                    $message = flash( 'success' );
-                if ( $message ): ?>
+                    $message = flash('success');
+                if ($message): ?>
                 <div class="mt-2 bg-teal-100 border border-teal-200 text-sm text-teal-800 rounded-lg p-4 text-center"
                     role="alert">
                     <span class="font-medium italic"><?=$message;?></span>
                 </div>
                 <?php endif;?>
 
-                <?php if ( isset( $errors['auth'] ) ): ?>
+                <?php if (isset($errors['auth'])): ?>
                 <div class="mt-2 bg-red-100 border border-red-200 text-sm text-red-800 rounded-lg p-4 text-center"
                     role="alert">
                     <span class="font-medium italic"><?=$errors['auth'];?></span>
@@ -145,17 +146,16 @@
                         </div>
 
                         <div class="mt-10 mx-auto w-full max-w-xl">
-                            <form class="space-y-6" action="<?=htmlspecialchars( $_SERVER['PHP_SELF'] )?>" method="POST"
-                                novalidate>
+                            <form class="space-y-6" action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST">
                                 <div>
                                     <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email
                                         address</label>
                                     <div class="mt-2">
                                         <input id="email" name="email" type="email" autocomplete="email" required
                                             class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2"
-                                            value="<?php echo htmlspecialchars( $oldInput['email'] ?? '' ); ?>">
+                                            value="<?php echo htmlspecialchars($oldInput['email'] ?? ''); ?>">
                                     </div>
-                                    <?php if ( isset( $errors['email'] ) ): ?>
+                                    <?php if (isset($errors['email'])): ?>
                                     <p class="text-xs text-red-600 mt-2">
                                         <?=$errors['email'];?>
                                     </p>
@@ -172,17 +172,16 @@
                                                 password?</a>
                                         </div>
                                     </div>
-                                    <div class="mt-2">
+                                    <div class="mt-2 relative">
                                         <input id="password" name="password" type="password"
                                             autocomplete="current-password" required
                                             class="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2">
-                                        <span
-                                            class="absolute right-20 bottom-[17rem] flex items-center pr-3 cursor-pointer"
+                                        <span class="absolute inset-y-0 end-0 flex items-center pr-3 cursor-pointer"
                                             onclick="togglePassword()">
                                             <i id="password-icon" class="fas fa-eye text-gray-400"></i>
                                         </span>
                                     </div>
-                                    <?php if ( isset( $errors['password'] ) ): ?>
+                                    <?php if (isset($errors['password'])): ?>
                                     <p class="text-xs text-red-600 mt-2">
                                         <?=$errors['password'];?>
                                     </p>
@@ -202,11 +201,12 @@
                                     class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Register
                                     now</a>
                             </p>
-                            <p class="mt-8 text-center text-sm text-gray-500">
-                                Give a anonymous feedback here.
-                                <a href="./feedback.php"
-                                    class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Feedback</a>
-                            </p>
+                            <div class="mt-4 text-sm bg-cyan-200 border border-teal-200 text-teal-800 rounded-lg p-4 text-center"
+                                role="alert">
+                                <span class="font-medium">
+                                    Email: test@user.com || Password: password
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

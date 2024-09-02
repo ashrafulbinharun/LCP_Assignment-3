@@ -3,14 +3,15 @@
     session_start();
 
     // check if the user is authenticated
-    if ( !isset( $_SESSION['user'] ) ) {
-        header( "Location: login.php" );
+    if (!isset($_SESSION['user'])) {
+        header("Location: login.php");
         exit;
     }
 
     require './functions.php';
 
-    $feedbacks = getFeedbacks();
+    $userId = $_SESSION['user_id'];
+    $feedbacks = getFeedbacks($userId);
 
 ?>
 <!DOCTYPE html>
@@ -105,31 +106,34 @@
             <div class="relative max-w-7xl mx-auto">
                 <div class="flex justify-end">
                     <span class="block text-gray-600 font-mono border border-gray-400 rounded-xl px-2 py-1">
-                        Your feedback form link: <a href="./feedback.php"><strong>http://localhost/feedback</strong></a>
+                        Your feedback form link:
+                        <a href="./feedback.php?user_id=<?=htmlspecialchars($userId)?>">
+                            <strong>http://localhost/feedback.php?user_id=<?=$userId?></strong>
+                        </a>
                     </span>
                 </div>
 
-                <?php if ( count( $feedbacks ) > 0 ): ?>
+                <?php if (count($feedbacks) > 0): ?>
                 <h1 class="text-xl text-indigo-800 text-bold my-10">Received feedback</h1>
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
 
-                    <?php foreach ( $feedbacks as $feedback ): ?>
+                    <?php foreach ($feedbacks as $feedback): ?>
 
                     <div
                         class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
                         <div class="focus:outline-none">
                             <p class="text-gray-500">
-                                <?=$feedback['feedback']?>
+                                <?=$feedback['message']?>
                             </p>
                             <p class="text-gray-600 mt-4 text-sm">Posted:
-                                <?=date( 'd-m-y', strtotime( $feedback['created_at'] ) )?>,
-                                <?=date( 'h:i A', strtotime( $feedback['created_at'] ) )?>
+                                <?=date('d-m-y', strtotime($feedback['created_at']))?>,
+                                <?=date('h:i A', strtotime($feedback['created_at']))?>
                             </p>
                         </div>
                     </div>
 
                     <?php endforeach;?>
-                    <?php else: ?>
+<?php else: ?>
                     <div class="mt-10 bg-cyan-200 border border-teal-200 text-teal-800 rounded-lg p-4 text-center"
                         role="alert">
                         <span class="text-base font-medium italic">No feedback received yet.</span>
