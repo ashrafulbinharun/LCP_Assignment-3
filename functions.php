@@ -4,12 +4,13 @@ define("USERS", __DIR__ . "/data/users.txt");
 define("FEEDBACKS", __DIR__ . "/data/feedbacks.txt");
 
 // Function to add a user
-function addUser($name, $email, $password) {
+function addUser($name, $email, $password)
+{
     $userId = uniqid();
     $user = [
-        'user_id'  => $userId,
-        'name'     => $name,
-        'email'    => $email,
+        'user_id' => $userId,
+        'name' => $name,
+        'email' => $email,
         'password' => $password,
     ];
 
@@ -18,7 +19,8 @@ function addUser($name, $email, $password) {
 }
 
 // Function to check if a user already exists by email
-function userExists($email) {
+function userExists($email)
+{
     $users = file(USERS, FILE_IGNORE_NEW_LINES);
     foreach ($users as $user) {
         $userData = unserialize($user);
@@ -30,7 +32,8 @@ function userExists($email) {
 }
 
 // Function to authenticate a user
-function authUser($email, $password) {
+function authUser($email, $password)
+{
     $users = file(USERS, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($users as $user) {
         $userData = unserialize($user);
@@ -42,7 +45,8 @@ function authUser($email, $password) {
 }
 
 // Function to generate a session flush message
-function flash($key, $message = null) {
+function flash($key, $message = null)
+{
     // If a message is passed in, set it
     if ($message) {
         $_SESSION['flash'][$key] = $message;
@@ -56,10 +60,11 @@ function flash($key, $message = null) {
 }
 
 // Function to add feedback
-function addFeedback($userId, $message) {
+function addFeedback($userId, $message)
+{
     $feedback = [
-        'user_id'    => $userId,
-        'message'    => $message,
+        'user_id' => $userId,
+        'message' => $message,
         'created_at' => date('Y-m-d H:i:s'),
     ];
 
@@ -68,7 +73,8 @@ function addFeedback($userId, $message) {
 }
 
 // Function to get all feedbacks
-function getFeedbacks($userId) {
+function getFeedbacks($userId)
+{
     $feedbacks = [];
 
     $allFeedbacks = file(FEEDBACKS, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);

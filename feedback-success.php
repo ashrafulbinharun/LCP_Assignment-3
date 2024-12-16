@@ -60,7 +60,6 @@
                                 TruthWhisper</h1>
                             <h3 class="text-gray-500 my-2">Thanks a lot for your submission!</h3>
                         </div>
-
                         <div class="mt-10 mx-auto w-full max-w-xl">
                             <img src="./images/success.jpg" alt="">
                         </div>

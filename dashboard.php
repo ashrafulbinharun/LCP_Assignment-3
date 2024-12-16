@@ -3,7 +3,7 @@
     session_start();
 
     // check if the user is authenticated
-    if (!isset($_SESSION['user'])) {
+    if ( ! isset($_SESSION['user'])) {
         header("Location: login.php");
         exit;
     }
@@ -116,9 +116,7 @@
                 <?php if (count($feedbacks) > 0): ?>
                 <h1 class="text-xl text-indigo-800 text-bold my-10">Received feedback</h1>
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-
                     <?php foreach ($feedbacks as $feedback): ?>
-
                     <div
                         class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
                         <div class="focus:outline-none">
@@ -131,9 +129,9 @@
                             </p>
                         </div>
                     </div>
-
                     <?php endforeach;?>
-<?php else: ?>
+
+                    <?php else: ?>
                     <div class="mt-10 bg-cyan-200 border border-teal-200 text-teal-800 rounded-lg p-4 text-center"
                         role="alert">
                         <span class="text-base font-medium italic">No feedback received yet.</span>
@@ -141,7 +139,6 @@
                     <?php endif;?>
                 </div>
             </div>
-
         </div>
     </main>
 

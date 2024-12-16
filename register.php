@@ -34,7 +34,7 @@
             $errors['email'] = 'Please provide an email address';
         } else {
             $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if ( ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = 'Please provide a valid email address';
             } elseif (userExists($email)) {
                 $errors['email'] = 'Email is already registered';
